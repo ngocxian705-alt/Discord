@@ -21,7 +21,7 @@ threading.Thread(target=run_web).start()
 
 # ================= CONFIG =================
 TOKEN = os.getenv("DISCORD_TOKEN")
-API_URL = "https://sikibidiapilike8.onrender.com/like"
+API_URL = "https://likeapisikibidi.onrender.com"
 
 # ================= DISCORD BOT =================
 intents = discord.Intents.default()
