@@ -21,7 +21,7 @@ threading.Thread(target=run_web).start()
 
 # ================= CONFIG =================
 TOKEN = os.getenv("DISCORD_TOKEN")
-API_URL = "https://likeapisikibidi.onrender.com"
+API_URL = "https://likeapisikibidi.onrender.com/like"
 
 # ================= DISCORD BOT =================
 intents = discord.Intents.default()
@@ -44,22 +44,20 @@ class LikeModal(discord.ui.Modal, title="Nhập UID Free Fire"):
             "uid": uid_value
         }
 
-        result_text = "Không có dữ liệu"
+        raw_text = "Không có dữ liệu"
 
         try:
             r = requests.get(API_URL, params=params, timeout=15)
             try:
-                # 👉 JSON GỐC
-                result_text = json.dumps(r.json(), indent=2, ensure_ascii=False)
+                raw_text = json.dumps(r.json(), indent=2, ensure_ascii=False)
             except:
-                # nếu API không trả JSON
-                result_text = r.text
+                raw_text = r.text
         except Exception as e:
-            result_text = str(e)
+            raw_text = str(e)
 
-        # Discord giới hạn 4096 ký tự → cắt nếu quá dài
-        if len(result_text) > 3800:
-            result_text = result_text[:3800] + "\n... (cắt bớt)"
+        # Discord giới hạn ký tự
+        if len(raw_text) > 3800:
+            raw_text = raw_text[:3800] + "\n... (cắt bớt)"
 
         embed = discord.Embed(
             title="❤️ FREE FIRE LIKE (RAW JSON)",
@@ -74,7 +72,7 @@ class LikeModal(discord.ui.Modal, title="Nhập UID Free Fire"):
         embed.add_field(name="👤 UID", value=uid_value, inline=False)
         embed.add_field(
             name="📦 API Response",
-            value=f"```json\n{result_text}\n```",
+            value=f"```json\n{raw_text}\n```",
             inline=False
         )
 
